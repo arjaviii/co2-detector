@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AirSense — Minimal CO₂ Monitor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+  <!-- Particle Background Layer -->
+  <canvas id="particle-canvas" class="particle-bg"></canvas>
+
+  <div class="app-container">
+
+    <!-- Top Bar -->
+    <nav class="top-bar">
+      <div class="brand">AirSense</div>
+      <div class="nav-actions">
+        <span id="clock" class="mono-display">--:--:--</span>
+        <button class="settings-trigger" onclick="toggleSettings()" title="Settings">⚙️</button>
+      </div>
+    </nav>
+
+    <!-- Connection & Controls Bar (Top) -->
+    <section class="control-panel">
+      <div class="device-group">
+        <input type="text" id="ip-input" class="minimal-input" placeholder="IP Address" value="10.51.67.63">
+      </div>
+
+      <div class="button-group">
+        <button id="btn-connect" class="btn primary-btn" onclick="toggleConnect()">CONNECT</button>
+        <button id="btn-demo" class="btn secondary-btn" onclick="toggleDemo()">DEMO</button>
+      </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+      <!-- Hero Metric (CO2) -->
+      <section class="hero-section">
+        <div class="aq-indicator" id="aq-badge">
+          <span class="status-indicator" id="aq-dot"></span>
+          <span id="aq-text">AWAITING DATA</span>
+        </div>
+
+        <div class="co2-display">
+          <span class="co2-number" id="co2-value">---</span>
+          <span class="co2-unit">ppm</span>
+        </div>
+
+        <p class="status-summary" id="status-summary">Connecting to sensor network...</p>
+      </section>
+
+      <!-- Sub Metrics Grid -->
+      <section class="metrics-grid">
+        <div class="metric-card">
+          <label>Temperature</label>
+          <div class="value-row">
+            <span id="temp-value">--</span><span class="unit">°C</span>
+          </div>
+        </div>
+        <div class="metric-card">
+          <label>Humidity</label>
+          <div class="value-row">
+            <span id="hum-value">--</span><span class="unit">%RH</span>
+          </div>
+        </div>
+        <div class="metric-card">
+          <label>TVOC</label>
+          <div class="value-row">
+            <span id="tvoc-value">--</span><span class="unit">ppb</span>
+          </div>
+        </div>
+        <div class="metric-card">
+          <label>Heat Index</label>
+          <div class="value-row">
+            <span id="hi-value">--</span><span class="unit">°C</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Charts Section -->
+      <section class="charts-section">
+        <div class="chart-card">
+          <label>CO₂ Trend (ppm)</label>
+          <div class="chart-wrapper">
+            <canvas id="chart-co2"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <label>Temperature Trend (°C)</label>
+          <div class="chart-wrapper">
+            <canvas id="chart-temp"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <label>Humidity Trend (%)</label>
+          <div class="chart-wrapper">
+            <canvas id="chart-hum"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <label>TVOC Trend (ppb)</label>
+          <div class="chart-wrapper">
+            <canvas id="chart-tvoc"></canvas>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer Status -->
+    <footer class="status-footer">
+      <div class="status-line">
+        <span class="status-dot-sm" id="status-dot"></span>
+        <span id="status-text">Disconnected</span>
+      </div>
+      <div class="terminal-log" id="log-text">Initializing minimalist interface...</div>
+    </footer>
+
+    <!-- Modals -->
+    <div id="modal-overlay" class="modal-overlay" onclick="closeModals()">
+      <div class="modal" onclick="event.stopPropagation()">
+        <header class="modal-header">
+          <h3>Settings</h3>
+          <button onclick="closeModals()">&times;</button>
+        </header>
+        <div id="modal-body" class="modal-body"></div>
+      </div>
+    </div>
+
+    <!-- Alert Banner -->
+    <div id="alert-overlay" class="hazardous-alert">
+      <div class="alert-box">
+        <h4>High CO₂ Detected</h4>
+        <p>Current levels exceed safety thresholds. Open windows for ventilation.</p>
+      </div>
+    </div>
+
+  </div>
+  <script src="script.js"></script>
+</body>
+
+</html>
